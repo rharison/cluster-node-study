@@ -1,4 +1,4 @@
-* Cluster Node Study
+# Cluster Node Study
 
 * Este projeto foi criado para utilizar técnicas de clusterização no nodeJS, a ideia é ter uma lista grande de usuários e para cada um deles criar um cartão de visitas no formato PDF.
 
@@ -6,7 +6,7 @@
 
 * No puppeteerCluster.js temos o projeto refatorado, utilizando a clusterização que resultou numa melhora significativa na gestão de recursos e entregando todas as requisições de serviço. 
 
-* Técnologias Utilizadas
+### Técnologias Utilizadas
 
 - NodeJS
 - Puppeteer
