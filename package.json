@@ -1,0 +1,25 @@
+{
+  "name": "cluster-node-study",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node src/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rharison/cluster-node-study.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/rharison/cluster-node-study/issues"
+  },
+  "homepage": "https://github.com/rharison/cluster-node-study#readme",
+  "dependencies": {
+    "puppeteer": "^15.4.0",
+    "uuid": "^8.3.2"
+  }
+}
