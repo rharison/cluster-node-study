@@ -57,7 +57,7 @@ async function main () {
     await cluster.close()
 
   } catch(error) {
-   console.error(`${pid} has broken! ${error.stack}`)
+    console.error(`${pid} has broken! ${error.stack}`)
   }
 }
 
