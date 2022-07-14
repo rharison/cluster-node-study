@@ -3,7 +3,7 @@ const { join } = require('path')
 const querystring = require('querystring')
 
 const { v1 } = require('uuid')
-const puppetteer = require('puppeteer')
+const { Cluster } = require('puppeteer-cluster')
 
 const BASE_URL = 'https://erickwendel.github.io/business-card-template/index.html'
 
@@ -23,12 +23,8 @@ function createQueryStringFromObject (data) {
   return qs
 }
 
-async function render({ finalURI, name }) {
+async function render({ page, data: { finalURI, name }}) {
   const output = join(__dirname, `./../output/${name}-${v1()}.pdf`)
-  const browser = await puppetteer.launch({
-    //headless: false,
-  })
-  const page = await browser.newPage()
   await page.goto(finalURI, { waitUntil: 'networkidle2' })
 
   await page.pdf({
@@ -38,22 +34,31 @@ async function render({ finalURI, name }) {
     printBackground: true,
   })
 
-  await browser.close()
+  console.log('endend', output)
+
 }
 
-async function main (message) {
+async function main () {
   const pid = process.pid
-  console.log(`${pid} got a message!`, message.name)
-  const qs = createQueryStringFromObject(message)
-  const finalURI = `${BASE_URL}?${qs}`
-
-
   try {
-    render({ finalURI, name: message.name })
-    process.send(`${pid} has finished!`)
+    const cluster = await Cluster.launch({
+      concurrency: Cluster.CONCURRENCY_PAGE,
+      maxConcurrency: 10,
+    })
+
+    await cluster.task(render)
+    for(const item of data) {
+      const qs = createQueryStringFromObject(item)
+      const finalURI = `${BASE_URL}?${qs}`
+      await cluster.queue({ finalURI, name: item.name })
+    }
+
+    await cluster.idle()
+    await cluster.close()
+
   } catch(error) {
-    process.send(`${pid} has broken! ${error.stack}`)
+   console.error(`${pid} has broken! ${error.stack}`)
   }
 }
 
-process.once('message', main)
+main()
